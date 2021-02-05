@@ -1,0 +1,70 @@
+= Softwareentwicklung im Team: Praktische Übung 10
+:icons: font
+:icon-set: fa
+:experimental:
+:source-highlighter: rouge
+ifdef::env-github[]
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+:stem: latexmath
+endif::[] 
+
+== Ziele der Übung
+
+In der Übung sollen Sie die Kommunikation zwischen zwei Systemen implementieren. 
+
+== Vorbereitung
+
+Sie sollten beide Anwendungen gleichzeitig in Ihre IDE laden. In Eclipse können Sie einfach beide Unterordner in einen Workspace importieren. Für IntelliJ finden Sie eine Anleitung in https://youtu.be/7F0reqU745I[diesem Video].
+
+== Aufgabenstellung 
+
+In der letzten praktischen Übung werden Sie verschiedene Arten der Kommunikation zwischen zwei Systemen entwickeln: Asynchrone Aufrufe, feedbasierte Datenreplikation und Asynchrone Kommunikation über eine externe Message-Queue. Dazu verwenden wir ein Minimalbeispiel einer e-Commerce Software. Die Software besteht aus zwei SCS. Einem System, das sich um Bestellungen kümmert und einem, welches die Auslieferung übernimmt.
+
+Das Bestellsystem soll das Auslieferungssystem benachrichtigen, wenn eine neue Bestellung ausgeliefert werden soll. Das Auslieferungssystem soll dem Bestellsystem Informationen über die Lieferung zur Verfügung stellen.
+
+=== Benachrichtigen des Liefersystems
+
+Erweitern Sie die Methode `neueBestellungFuer(String kunde)` in der Klasse `BestellungenService` so, dass *asynchron* der Endpunkt `/liefern` im Lieferungen SCS aufgerufen wird.
+
+IMPORTANT: Benachrichtigungen dürfen niemals verloren gehen, wenn das Lieferungen SCS für eine Zeit nicht erreichbar oder langsam ist.
+
+Es gibt eine ganze Reihe von Optionen für die Implementierung:
+
+* Sie können die Methode mit `@Async` annotieren. Dann wird die Methode von Spring in einem anderen Thread ausgeführt. Es ist zu beachten, dass `@Async` nur bei Methoden in Spring Beans funktioniert. Ein beispiel für die Verwendung von `@Async` finden Sie in der Klasse `LieferungService`. 
+* Sie können eine Queue verwenden, in die Sie "Arbeitsaufträge" ablegen (hier könnten Sie einfach die Bestellung-Objekte nutzen). Zusätzlich würden Sie eine Methode schreiben, die periodisch die Queue abarbeitet und das Lieferungen-SCS aufruft.
+* ...
+
+=== Synchronisierung der Informationen des Liefersystems
+
+Erweitern Sie den Controller des Liefersystems um einen Endpunkt, über den der Bestelldienst die getätigten Lieferungen seit einer bestimmten ID abfragen kann. Schreiben Sie eine Methode im Bestell-SCS, die die Informationen aus dem Lieferungen-SCS abfragt und lokal speichert, indem die `verschickt` Methode der betroffenen Bestellungen aufgerufen wird.
+
+TIP: Wie eine solche Implementierung aussehen könnte, ist im Video "Kommunikation zwischen SCS" dargestellt.
+
+=== Benachrichtigung über eine Message-Queue
+
+Ersetzen Sie die Implementierungen durch eine Version, die RabbitMQ als Message Queue verwendet. Das Bestell SCS soll Nachrichten über Bestellungen in RabbitMQ posten und das Lieferungen SCS soll die Nachrichten dort abholen. Umgekehrt soll das Lieferungen SCS dort Nachrichten über durchgeführte Lieferungen einliefern, die dann von dem Bestell SCS gelesen und erarbeitet werden. Verwenden Sie zwei unterschiedliche Topics für die Nachrichten.
+
+== Ablauf der Übung
+
+. Schalten Sie *mindestens* das Mikrofon, aber besser auch die Kamera, ein
+. Am Anfang gibt es eine kurze Vorstellungsrunde
+. Es wird festgelegt, in welcher Reihenfolge die "Driver" Rolle übernommen wird
+. Die erste Person teilt Ihren Screen und übernimmt mithilfe von `mob` die Session
+. Es wird an der Problemstellung gemeinsam gearbeitet nach den Regeln des Mob Programmings
+. Nach ca. der Hälfte der Zeit gibt es ein Feedback durch die Tutorin oder den Tutor
+. Es wird weiter an der Problemstellung gearbeitet
+. ca. 10 Minuten vor Ende der Session bekommen Sie Ihre Abschlussbewertung
+
+NOTE: Diese praktische Übung wird für die Zulassung gewertet.
+Sie müssen vorbereitet sein und einen hinreichenden Beitrag leisten.
+
+== Verhaltensregeln
+
+Wir erwarten von Ihnen einen respektvollen Umgang miteinander.
+Es gilt grundsätzlich bei uns der https://berlincodeofconduct.org/de/[Berlin Code of Conduct].
+Die TutorInnen haben die Aufgabe, die Einhaltung der Regeln zu überwachen und können bei Verstößen gegen den Verhaltenskodex Personen aus der praktischen Übung entfernen.
+

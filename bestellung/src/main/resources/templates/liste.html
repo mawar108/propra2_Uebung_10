@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bestellungen</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <style>
+        .verschickt {
+            color: green;
+        }
+
+        .warte {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h2>Alle Bestellungen</h2>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Kunde</th>
+        </tr>
+        </thead>
+        <tbody th:remove="all-but-first">
+        <tr th:each="bestellung : ${bestellungen}">
+            <td th:text="${bestellung.getId()}">1</td>
+            <td class="warte"
+                th:text="${bestellung.getKunde()}"
+                th:classappend="${bestellung.wurdeVerschickt() ? 'verschickt' : 'warte'}">Andreas Müller
+            </td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td class="warte">Peter Wertheimer</td>
+        </tr>
+        <tr>
+            <td>7</td>
+            <td class="verschickt">Karl Ebert</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <hr>
+    <h2>Neue Bestellung</h2>
+    <div class="card-body">
+        <form method="post">
+            <div class="mb-3">
+                <label for="kunde" class="form-label">Kunde</label>
+                <input type="text" class="form-control" id="kunde" name="kunde" autofocus placeholder="Alfons Schubert">
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary">Neue Bestellung anlegen</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+version: "3.1"
+services:
+  rabbit:
+    image: rabbitmq:3.8-management-alpine
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment: 
+      - "RABBITMQ_DEFAULT_USER=groot"
+      - "RABBITMQ_DEFAULT_PASS=iamgroot"
